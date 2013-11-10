@@ -121,6 +121,9 @@
                             История о том, как мы билдбот через код-ревью пускали
                         </aside>
                     </section>
+                    <section>
+                        <img src="images/buildbot-self-update.png" alt="Buildbot Self Update"/>
+                    </section>
                 </section>
                 <section>
                     <section>
@@ -128,6 +131,29 @@
                         <aside class="notes">
                             История о том, как можно генерить сборки
                         </aside>
+                    </section>
+                    <section>
+                        <h2>Циклы наше всё</h2>
+                        <pre style="width: 95%; height: 100%;"><code style="max-height: 100%;" data-language="python">
+for board, f, b in build_branches:
+        f1 = factory.BuildFactory()
+        f1.workdir="system"
+        f1.addStep(
+            Repo(manifest_url=url, manifest_branch=b, manifest_file=f,))
+        f1.addStep(
+            Compile(name="clobber old output",command="rm -rf out"))
+        f1.addStep(
+            Compile(
+                name="compile everything",
+                command=buildcommand))
+        builddir="%s_%s" % (board, manifest_file)
+        b1 = BuilderConfig(
+                           name=builddir,
+                           slavenames=slaves,
+                           builddir=builddir,
+                           factory=f1)
+        builders.append(b1)
+                        </code></pre>
                     </section>
                 </section>
                 <section>
